@@ -59,7 +59,7 @@ with st.sidebar:
     blog_id_input = st.text_input("분석할 네이버 블로그 ID", value="doctordk")
     max_pages_input = st.slider("수집할 페이지 수 (1페이지당 약 30글)", min_value=1, max_value=10, value=2)
     
-    # [새로 추가된 기능] 사용자 맞춤형 추가 지시사항 입력란
+    # [기능 1] 특별 지시사항 입력 UI
     st.markdown("---")
     st.header("🎯 AI 특별 지시사항")
     custom_instruction = st.text_area(
@@ -103,7 +103,10 @@ if start_button:
             
             client = genai.Client(api_key=api_key_hidden)
             
-            # [수정됨] 표 양식에 종목코드, PER/PBR, 펀더멘탈 정보를 추가하도록 지시문을 변경했습니다.
+            # [수정 완료] 누락되었던 지시사항 변수를 정상적으로 선언합니다.
+            instruction_text = f"**[매우 중요한 특별 지시사항]: {custom_instruction}**\n위 지시사항을 최우선으로 반영하여 분석 결과를 도출하세요." if custom_instruction else "전반적인 투자 인사이트와 핵심 종목을 분석해 주세요."
+            
+            # [기능 2] 펀더멘탈 항목이 추가된 프롬프트
             analyst_prompt = f"""
             당신은 여의도 탑티어 주식 애널리스트입니다. 제공된 텍스트는 특정 투자 블로거의 게시글 모음입니다.
             감정적이고 부차적인 내용은 배제하고, 철저히 '팩트'와 '투자 인사이트' 위주로 간결하게 분석하세요.
